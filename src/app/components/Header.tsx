@@ -24,11 +24,11 @@ const headerData = {
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   return (
     <header className="header">
-      <nav className="navbar navbar-expand-lg">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
           <Link className="navbar-brand" href="/">
             {headerData.brand}
@@ -42,43 +42,39 @@ export function Header() {
           </button>
           <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
             <ul className="navbar-nav ms-auto">
-              {headerData.links.map((link, index) => (
-                <li
-                  key={index}
-                  className={`nav-item ${link.submenu ? "dropdown" : ""}`}
-                  onMouseEnter={() => setDropdownOpen(index)}
-                  onMouseLeave={() => setDropdownOpen(null)}
-                >
-                  {link.submenu ? (
-                    <>
-                      <a
-                        className="nav-link dropdown-toggle"
-                        href="#"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        {link.name}
-                      </a>
-                      <ul
-                        className={`dropdown-menu ${
-                          dropdownOpen === index ? "show" : ""
-                        }`}
-                      >
-                        {link.submenu.map((sublink, subIndex) => (
-                          <li key={subIndex}>
-                            <Link className="dropdown-item" href={sublink.href}>
-                              {sublink.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
+              {headerData.links.map((link, index) =>
+                link.submenu ? (
+                  <li
+                    key={index}
+                    className="nav-item dropdown"
+                    onMouseEnter={() => setDropdownOpen(true)}
+                    onMouseLeave={() => setDropdownOpen(false)}
+                  >
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      {link.name}
+                    </a>
+                    <ul className={`dropdown-menu ${dropdownOpen ? "show" : ""}`}>
+                      {link.submenu.map((sublink, subIndex) => (
+                        <li key={subIndex}>
+                          <Link className="dropdown-item" href={sublink.href}>
+                            {sublink.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ) : (
+                  <li key={index} className="nav-item">
                     <Link className="nav-link" href={link.href}>
                       {link.name}
                     </Link>
-                  )}
-                </li>
-              ))}
+                  </li>
+                )
+              )}
             </ul>
           </div>
         </div>
